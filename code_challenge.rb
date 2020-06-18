@@ -1,9 +1,10 @@
 
 elevations = [0, 3, 6, 2, 7, 4, 5, 3, 8, 1, 2]
-# mapped array should return [0, 0, 0, 4, 0, 3, 2, 4, 0, 1, 0]
+# new array should return [4, 3, 2, 4, 1]
 # expected output 14
 
-elevations.map.with_index do |elevation, i|
+water_units = []
+elevations.each_with_index do |elevation, i|
   # to find a valley, we want to find the max elevation on
   # either side of our current index
   hills = [elevations[0..i].max, elevations[i..-1].max]
@@ -13,6 +14,14 @@ elevations.map.with_index do |elevation, i|
   # we can subtract the elevation at our current index
   # from the elevation of the smallest hill to the calculate
   # how much water can fill the valley at that position
-  small_hill - elevation
-  # we then need to sum the water array to get the total amount of water captured
-end.sum
+  valley_units = small_hill - elevation
+  # I know this isn't entirely necessary since 0 wouldn't factor into the sum
+  # but figured it would be slightly faster in that the sum function
+  # would only need to look through 5 positions instead of 11
+  if valley_units > 0
+    water_units << valley_units
+  end
+end
+
+# we then need to sum the water array to get the total amount of water captured
+water_units.sum
